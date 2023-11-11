@@ -40,16 +40,16 @@ resource "aws_launch_template" "template" {
   name                   = "${var.env}-${var.name}-lt"
   image_id               = data.aws_ami.centos.image_id
   instance_type          = var.instance_type
-  vpc_security_group_ids = [aws_autoscaling_group.asg.id]
+  vpc_security_group_ids = [aws_security_group.sg.id]
 }
 
 # creating the auto scaling group to scale instance based on the load
 resource "aws_autoscaling_group" "asg" {
   name                = "${var.env}-${var.name}-asg"
-  vpc_zone_identifier = var.subnet_ids
   desired_capacity    = var.desired_capacity
   max_size            = var.max_size
   min_size            = var.min_size
+  vpc_zone_identifier = var.subnet_ids
 
   # attaching the template for autoscaling group
   launch_template {
