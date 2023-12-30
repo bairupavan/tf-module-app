@@ -48,7 +48,7 @@ resource "aws_launch_template" "template" {
 
   user_data = base64encode(templatefile("${path.module}/userdata.sh", {
     name = var.name
-    env = var.env
+    env  = var.env
   }))
 }
 
@@ -87,8 +87,8 @@ resource "aws_lb_target_group" "alb_target_group" {
 }
 
 resource "aws_lb_listener_rule" "listener_rule" {
-  listener_arn      = var.listener_arn
-  listener_priority = var.listener_priority
+  listener_arn = var.listener_arn
+  priority     = var.listener_priority
 
   action {
     type             = "forward"
@@ -104,7 +104,7 @@ resource "aws_lb_listener_rule" "listener_rule" {
 
 resource "aws_route53_record" "dns" {
   zone_id = var.domain_id
-  name    = local.dns_name
+  name    = [local.dns_name]
   type    = "CNAME"
   ttl     = 30
   records = var.alb_dns_name
